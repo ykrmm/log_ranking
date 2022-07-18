@@ -43,7 +43,7 @@ if args.training == 'transductive':
          = load_static_network(args.dataset,datapath,mode='interaction')
 
 elif args.training == 'inductive':
-    user_dict_train,user_dict_struct_val,user_dict_pred_val,user_dict_struct_test,user_dict_pred_test,user2id,item2id,list_users,list_items\
+    user_dict_train,user_dict_struct_train,user_dict_pred_train,user_dict_struct_val,user_dict_pred_val,user_dict_struct_test,user_dict_pred_test,user2id,item2id,list_users,list_items\
          = load_static_network(args.dataset,datapath,mode='user')
 
 n_users = len(user2id)

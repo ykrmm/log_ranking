@@ -87,10 +87,10 @@ def load_static_network(network,datapath,mode='interaction',min_interaction=5,te
         print("*** Network loading completed ***\n\n")
         return user_dict_train,user_dict_val,user_dict_test,user2id,item2id,list_users,list_items
     elif mode == 'user':
-        user_dict_train,user_dict_struct_val,user_dict_pred_val,user_dict_struct_test,user_dict_pred_test = \
+        user_dict_train,user_dict_struct_train,user_dict_pred_train,user_dict_struct_val,user_dict_pred_val,user_dict_struct_test,user_dict_pred_test = \
             split_static_user(user_dict,val_user_ratio=val_ratio,test_user_ratio=test_ratio,pred_ratio=pred_ratio)
         print("*** Network loading completed ***\n\n")
-        return user_dict_train,user_dict_struct_val,user_dict_pred_val,user_dict_struct_test,user_dict_pred_test,user2id,item2id,list_users,list_items
+        return user_dict_train,user_dict_struct_train,user_dict_pred_train,user_dict_struct_val,user_dict_pred_val,user_dict_struct_test,user_dict_pred_test,user2id,item2id,list_users,list_items
 
     # To undirected 
     
@@ -182,10 +182,14 @@ def split_static_user(user_dict,val_user_ratio=0.2,test_user_ratio=0.2,pred_rati
     user_dict_val = {}
     user_dict_test = {}
 
+
+    user_dict_struct_train = {}
+    user_dict_pred_train = {}
     user_dict_struct_val = {}
     user_dict_struct_test = {}
     user_dict_pred_val = {}
     user_dict_pred_test = {}
+    
 
     user_list = list(user_dict.keys())
     user_train,user_test = train_test_split(user_list,test_size=test_user_ratio,random_state=57) 
@@ -199,6 +203,12 @@ def split_static_user(user_dict,val_user_ratio=0.2,test_user_ratio=0.2,pred_rati
         user_dict_test[u] = user_dict[u]
 
 
+    for user,interactions in user_dict_train.items():
+        i_struct,i_pred = train_test_split(interactions,test_size=pred_ratio,random_state=57)
+        user_dict_struct_train[user] = i_struct
+        user_dict_pred_train[user] = i_pred
+
+
     for user,interactions in user_dict_val.items():
         i_struct,i_pred = train_test_split(interactions,test_size=pred_ratio,random_state=57)
         user_dict_struct_val[user] = i_struct
@@ -210,7 +220,7 @@ def split_static_user(user_dict,val_user_ratio=0.2,test_user_ratio=0.2,pred_rati
         user_dict_pred_test[user] = i_pred
         
     
-    return user_dict_train,user_dict_struct_val,user_dict_pred_val,user_dict_struct_test,user_dict_pred_test
+    return user_dict_train,user_dict_struct_train,user_dict_pred_train,user_dict_struct_val,user_dict_pred_val,user_dict_struct_test,user_dict_pred_test
 
 
 # DYNAMIC 
